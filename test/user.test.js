@@ -21,6 +21,12 @@ describe('user routes', () => {
     user = JSON.parse(JSON.stringify(await User.create({ email: 'test@test.com', password: 'testtest' })));
   });
 
+  const agent = request.agent(app);
+  beforeEach(() => {
+    return agent
+      .post('/api/v1/auth/signin')
+      .send({ email: user.email, password: 'testtest' });
+  });
   afterAll(() => {
     return mongoose.connection.close();
   });
@@ -41,6 +47,17 @@ describe('user routes', () => {
     return request(app)
       .post('/api/v1/auth/signin')
       .send({ email: user.email, password: 'testtest' })
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.any(String),
+          email: 'test@test.com',
+          __v: 0
+        });
+      });
+  });
+  it('verify user', async() => {
+    return agent
+      .get('/api/v1/auth/verify')
       .then(res => {
         expect(res.body).toEqual({
           _id: expect.any(String),

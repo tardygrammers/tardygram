@@ -71,5 +71,22 @@ describe('user routes', () => {
       });
   });
 
+  it('Deletes a tardyGram', async() => {
+    const tardyGrams = getTardyGrams();
+    const users = getUsers();
+    const tardyGram = tardyGrams.find(tardyGram => tardyGram.user === users[0]._id);
+    return getAgent()
+      .delete(`/api/v1/tardyGrams/${tardyGram._id}`)
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.any(String),
+          user: expect.any(String),
+          photoUrl: expect.any(String),
+          caption: expect.any(String),
+          tags: [expect.any(String)]
+        });
+      });
 
+  });
 });
+

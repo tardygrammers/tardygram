@@ -35,4 +35,19 @@ describe('user routes', () => {
         });
       });
   });
+
+  it('Can GET a tardyGram by id', async() => {
+    const tardyGrams = getTardyGrams();
+    return getAgent()
+      .get(`/api/v1/tardyGrams/${tardyGrams[0]._id}`)
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.any(String),
+          user: expect.any(String),
+          photoUrl: expect.any(String),
+          caption: expect.any(String),
+          tags: [expect.any(String)]
+        });
+      });
+  });
 });

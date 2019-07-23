@@ -32,37 +32,26 @@ describe('user routes', () => {
     return mongoose.connection.close();
   });
 
-  it('auth signup', () => {
-    return request(app)
-      .post('/api/v1/auth/signup')
-      .send({ email: 'test1@test.com', password: 'testtest' })
-      .then(res => {
-        expect(res.body).toEqual({
-          _id: expect.any(String),
-          email: 'test1@test.com',
-          __v: 0
-        });
-      });
-  });
-  it('auth signin', async() => {
-    return request(app)
-      .post('/api/v1/auth/signin')
-      .send({ email: user.email, password: 'testtest' })
-      .then(res => {
-        expect(res.body).toEqual({
-          _id: expect.any(String),
-          email: 'test@test.com',
-          __v: 0
-        });
-      });
-  });
-  it('verify user', async() => {
+  it('POST a tardyGram', () => {
     return agent
-      .get('/api/v1/auth/verify')
+      .post('/api/v1/tardyGrams/')
+      .send({ 
+        photoUrl: 'https://images.pexels.com/photos/617278/pexels-photo-617278.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+        caption: 'its a cat',
+        tags: ['#yellow', '#tabby']
+      })
       .then(res => {
-        expect(res.body).toEqual({
+        console.log(res.body, 'res.body')
+        expect(res.body).toEqual({ 
           _id: expect.any(String),
-          email: 'test@test.com',
+          photoUrl: 'https://images.pexels.com/photos/617278/pexels-photo-617278.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+          caption: 'its a cat',
+          tags: ['#yellow', '#tabby'],
+          user: {
+            _id: expect.any(String),
+            email: 'test@test.com',
+            __v: 0
+          },
           __v: 0
         });
       });

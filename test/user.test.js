@@ -40,7 +40,6 @@ describe('user routes', () => {
         expect(res.body).toEqual({
           _id: expect.any(String),
           email: 'test1@test.com',
-          __v: 0
         });
       });
   });
@@ -52,7 +51,6 @@ describe('user routes', () => {
         expect(res.body).toEqual({
           _id: expect.any(String),
           email: 'test@test.com',
-          __v: 0
         });
       });
   });
@@ -63,7 +61,6 @@ describe('user routes', () => {
         expect(res.body).toEqual({
           _id: expect.any(String),
           email: 'test@test.com',
-          __v: 0
         });
       });
   });

@@ -59,10 +59,8 @@ describe('user routes', () => {
           tags: ['#yellow', '#tabby'],
           user: {
             _id: expect.any(String),
-            email: 'test@test.com',
-            __v: 0
-          },
-          __v: 0
+            email: 'test@test.com'
+          }
         });
       });
   });

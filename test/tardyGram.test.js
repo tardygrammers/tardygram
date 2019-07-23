@@ -1,4 +1,4 @@
-const { getAgent, getTardyGrams } = require('./data-helpers');
+const { getAgent, getTardyGrams, getUsers } = require('./data-helpers');
 
 describe('user routes', () => {
  
@@ -50,4 +50,26 @@ describe('user routes', () => {
         });
       });
   });
+
+  it('Can PATCH a tardyGram', async() => {
+    const tardyGrams = getTardyGrams();
+    const users = getUsers();
+    const tardyGram = tardyGrams.find(tardyGram => tardyGram.user === users[0]._id);
+    return getAgent()
+      .patch(`/api/v1/tardyGrams/${tardyGram._id}`)
+      .send({
+        caption: 'nerd bomb'
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.any(String),
+          user: expect.any(String),
+          photoUrl: expect.any(String),
+          caption: 'nerd bomb',
+          tags: [expect.any(String)]
+        });
+      });
+  });
+
+
 });

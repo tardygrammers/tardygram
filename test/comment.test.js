@@ -1,4 +1,4 @@
-const { getAgent, getTardyGrams, getUsers, getComments } = require('./data-helpers');
+const { getAgent, getTardyGrams, getComments } = require('./data-helpers');
 
 describe('user routes', () => {
   it('POST a comment', async() => {

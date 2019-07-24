@@ -3,7 +3,7 @@ const TardyGram = require('../lib/models/Tardygram');
 const Comment = require('../lib/models/Comment');
 const chance = require('chance').Chance();
 
-module.exports = async({ users = 5, tardyGrams = 10, comments = 3 } = { users: 5, tardyGrams: 10, comments: 3 }) => {
+module.exports = async({ users = 10, tardyGrams = chance.integer({ min: 10, max: 20 }), comments = chance.integer({ min: 1, max: 10 }) } = { users: 10, tardyGrams: chance.integer({ min: 10, max: 20 }), comments: chance.integer({ min: 1, max: 10 }) }) => {
   const createdUsers = await User.create(
     [...Array(users)].map(() => ({
       username: chance.name(),

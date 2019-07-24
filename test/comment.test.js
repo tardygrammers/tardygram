@@ -2,7 +2,7 @@ const { getAgent, getTardyGrams, getUsers, getComments } = require('./data-helpe
 
 describe('user routes', () => {
   it('POST a comment', async() => {
-    const gram = await getTardyGrams()[0];
+    const gram = getTardyGrams()[0];
     return getAgent()
       .post('/api/v1/comments')
       .send({ 
@@ -11,8 +11,21 @@ describe('user routes', () => {
         tardyGram: gram._id
       })
       .then(res => {
-        console.log(res.body, 'resbody');
         expect(res.body).toEqual({ 
+          _id: expect.any(String),
+          commentBy: expect.any(String),
+          comment: expect.any(String),
+          tardyGram: expect.any(String)
+        });
+      });
+  });
+
+  it('can DELETE a comment', async() => {
+    const comment = getComments();
+    return getAgent()
+      .delete(`/api/v1/comments/${comment[0]._id}`)
+      .then(res => {
+        expect(res.body).toEqual({
           _id: expect.any(String),
           commentBy: expect.any(String),
           comment: expect.any(String),

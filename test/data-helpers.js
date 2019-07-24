@@ -18,11 +18,12 @@ beforeEach(() => {
 let agent = request.agent(app);
 let seededUsers = null;
 let seededTardyGrams = null;
+let seededComments = null;
 beforeEach(async() => {
-  const { users, tardyGrams } = await seedData();
+  const { users, tardyGrams, comments } = await seedData();
   seededUsers = prepare(users);
   seededTardyGrams = prepare(tardyGrams);
-
+  seededComments = prepare(comments);
   return await agent
     .post('/api/v1/auth/signin')
     .send({ email: users[0].email, password: 'password' });
@@ -35,5 +36,6 @@ afterAll(() => {
 module.exports = {
   getAgent: () => agent,
   getUsers: () => seededUsers,
-  getTardyGrams: () => seededTardyGrams
+  getTardyGrams: () => seededTardyGrams,
+  getComments: () => seededComments
 };

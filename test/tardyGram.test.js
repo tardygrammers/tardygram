@@ -82,7 +82,7 @@ describe('user routes', () => {
           _id: expect.any(String),
           user: expect.any(String),
           photoUrl: expect.any(String),
-          caption: expect.any(String),
+          caption: tardyGram.caption,
           tags: [expect.any(String)]
         });
       });

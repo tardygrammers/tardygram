@@ -3,7 +3,7 @@ const TardyGram = require('../lib/models/Tardygram');
 const Comment = require('../lib/models/Comment');
 const chance = require('chance').Chance();
 
-module.exports = async({ users = 10, tardyGrams = chance.integer({ min: 10, max: 20 }), comments = chance.integer({ min: 1, max: 10 }) } = { users: 10, tardyGrams: chance.integer({ min: 10, max: 20 }), comments: chance.integer({ min: 1, max: 10 }) }) => {
+module.exports = async({ users = 30, maxTardyGrams = 30, maxComments = 50 } = {}) => {
   const createdUsers = await User.create(
     [...Array(users)].map(() => ({
       username: chance.name(),
@@ -12,21 +12,34 @@ module.exports = async({ users = 10, tardyGrams = chance.integer({ min: 10, max:
     }))
   );
 
+  const gramsToCreate = createdUsers
+    .flatMap(user => {
+      return [...Array(chance.integer({ min: 2, max: maxTardyGrams }))]
+        .map(() => ({
+          user: user._id,
+          photoUrl: chance.url({ path: 'images' }),
+          caption: chance.sentence(),
+          tags: [...Array(chance.integer({ min: 1, max: 10 }))]
+            .map(() => chance.hashtag())
+        }));
+    });
+ 
   const createdTardyGrams = await TardyGram.create(
-    [...Array(tardyGrams)].map(() => ({
-      user: chance.pickone(createdUsers)._id,
-      photoUrl: chance.url({ path: 'images' }),
-      caption: chance.sentence(),
-      tags: [chance.hashtag()]
-    }))
+    gramsToCreate
   );
 
+  const commentsToCreate = createdTardyGrams
+    .flatMap(gram => {
+      return [...Array(chance.integer({ min: 2, max: maxComments }))]
+        .map(() => ({
+          commentBy: chance.pickone(createdUsers)._id,
+          comment: chance.sentence(),
+          tardyGram: gram._id 
+        }));
+    });
+
   const createdComments = await Comment.create(
-    [...Array(comments)].map(() => ({
-      commentBy: chance.pickone(createdUsers)._id,
-      comment: chance.sentence(),
-      tardyGram: chance.pickone(createdTardyGrams)._id
-    }))
+    commentsToCreate
   );
 
   return {
